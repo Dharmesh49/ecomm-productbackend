@@ -37,11 +37,33 @@ class ProductController extends Controller
 
       return ["result"=>"Operation failed try again..!!!"];
     }
-  }
+  
   function getProduct($id)
   {
     return Product::find($id);
   }
-
-
 }
+
+function updateProduct($id,Request $req)
+{
+      $product =  Product::find($id);
+      $product->name=$req->input('name');
+      $product->price=$req->input('price');
+      $product->description=$req->input('description');
+      if($req->file('file'))
+      {
+      $product->file_path=$req->file('file')->store('products');
+
+      }
+      $product->save();
+      return $product;
+    }
+     function search($key)
+   {
+          return Product::where('name','LIKE',"%$key%")->get();
+    }
+
+  
+}
+
+
